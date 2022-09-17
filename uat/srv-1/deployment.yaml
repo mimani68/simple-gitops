@@ -12,10 +12,41 @@ spec:
     metadata:
       labels:
         app: server
+        tier: backend
     spec:
+      restartPolicy: Always
       containers:
-      - image: mimani/sample-server:latest
+      - name: server-app
+        image: mimani/sample-server:latest
         imagePullPolicy: Always
-        name: server-app
         ports:
         - containerPort: 3000
+        resources:
+          limits:
+            cpu: 250m
+            memory: 400Mi
+          requests:
+            cpu: 100m
+            memory: 150Mi
+
+        # https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
+
+        envFrom:
+        - configMapRef:
+            name: app-env-config
+
+        # env:
+        # - name: LOG_LEVEL
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: app_env_config
+        #       key: LOG_LEVEL
+
+        # volumeMounts:
+        # - name: envVolume
+        #   mountPath: /app/.env
+
+      # volumes:
+      # - name: envVolume
+      #   configMap:
+      #     name: app_env_config

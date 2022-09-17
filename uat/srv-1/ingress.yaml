@@ -3,17 +3,26 @@ kind: Ingress
 metadata:
   name: server-url
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: traefik
+    # traefik.ingress.kubernetes.io/router.middlewares: <ns>-<middleware>@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: example2-global-rewrite@kubernetescrd
 spec:
   rules:
   - http:
       paths:
-      - path: /server
+      - path: /api/v1
         pathType: Prefix
         backend:
           service:
             name: server-srv
             port:
-              number: 80
+              name: http
+  - http:
+      paths:
+      - path: /api/v2
+        pathType: Prefix
+        backend:
+          service:
+            name: server-srv
+            port:
+              name: http
