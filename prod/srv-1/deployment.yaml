@@ -17,7 +17,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: server-app
-        image: mimani/sample-server:latest
+        image: mimani/sample-server:b04e0ba3b9fbb84b9d987525c5cba70d0917682e
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
